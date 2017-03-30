@@ -13,11 +13,11 @@ Super duper easy way to release your Android and other artifacts to bintray.
 
 ## 新增依赖
 
-*1.根目录下的build.gradle中加入上传开源库的依赖：*
+**1.根目录下的build.gradle中加入上传开源库的依赖：**
 ```groovy
 classpath 'com.aaron.gradle:bintray-release:1.0.0'
 ```
-*2.library的module中加入 apply*
+**2.library的module中加入 apply**
 ```groovy
 apply plugin: 'com.aaron.gradle.bintray-release'
 ```
@@ -38,13 +38,13 @@ publish {
 }
 ```
 
-最后，利用 task `bintrayUpload` 完成上传 (确保已提前在指定位置生成了相应jar包!):
+最后，利用 task `bintrayUpload` 完成上传 (**确保已提前在指定位置生成了相应jar包!**):
 
 ```bash
 $ ./gradlew bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
 ```
 ## 常见错误排除
-*1.如果你开源库中有中文注释在module的build.gradle加入格式*
+**1.如果你开源库中有中文注释在module的build.gradle加入格式**
 ```groovy
 allprojects {
     repositories {
@@ -64,7 +64,7 @@ allprojects {
 tasks.getByPath(":library模块:releaseAndroidJavadocs").enabled = false
 ```
 
-*2.忽略错误信息：module的build.gradle*
+**2.忽略错误信息：module的build.gradle**
 ```groovy
 android {
  lintOptions {
