@@ -6,6 +6,7 @@ Super duper easy way to release your Android and other artifacts to bintray.
 
 此项目基于[Github Novoda](https://github.com/novoda/bintray-release)修改而来。
 改进点：
+
 在publish内新增archives参数，可上传指定的jar包或者aar包。
 
 这样我们便可以很容易上传自己生成的jar，比如混淆过的。
