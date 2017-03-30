@@ -16,9 +16,22 @@ compileGroovy {
     targetCompatibility = '1.6'
 }
 
+
+// 在本地生成文件库
+uploadArchives{
+    repositories{
+        mavenDeployer{
+            repository(url:uri('../repo'))
+            pom.groupId = 'com.aaron.gradle.release' // 组名
+            pom.artifactId = 'bintray-release' // 插件名
+            pom.version = '1.0.1' // 版本号
+        }
+    }
+}
+
 publish {
-    userOrg = 'novoda'
-    groupId = 'com.novoda'
+    userOrg = 'aaron'
+    groupId = 'com.aaron'
     artifactId = rootProject.name
     version = project.version
     description = 'Super duper easy way to release your Android and other artifacts to bintray'

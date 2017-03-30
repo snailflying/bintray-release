@@ -1,4 +1,4 @@
-package com.novoda.gradle.release
+package com.aaron.gradle
 
 import org.gradle.api.Project;
 
@@ -28,10 +28,16 @@ class PropertyFinder {
         getString(project, 'publishVersion', extension.publishVersion ?: extension.version)
     }
 
+    def getArchives() {
+        getFile(project, 'archives', extension.archives)
+    }
+
     private String getString(Project project, String propertyName, String defaultValue) {
         project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
     }
-
+    private File getFile(Project project, String propertyName, File defaultValue) {
+        defaultValue
+    }
     private boolean getBoolean(Project project, String propertyName, boolean defaultValue) {
         project.hasProperty(propertyName) ? Boolean.parseBoolean(project.getProperty(propertyName)) : defaultValue
     }

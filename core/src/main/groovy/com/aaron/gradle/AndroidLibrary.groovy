@@ -1,4 +1,4 @@
-package com.novoda.gradle.release
+package com.aaron.gradle
 
 import org.gradle.api.DomainObjectSet
 import org.gradle.api.Project

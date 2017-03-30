@@ -1,4 +1,4 @@
-package com.novoda.gradle.release
+package com.aaron.gradle.release
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner

@@ -1,4 +1,4 @@
-package com.novoda.gradle.release
+package com.aaron.gradle
 
 class PublishExtension {
 
@@ -29,6 +29,7 @@ class PublishExtension {
     @Deprecated
     String description
     String desc
+    File archives
 
     String website = ''
     String issueTracker = ''

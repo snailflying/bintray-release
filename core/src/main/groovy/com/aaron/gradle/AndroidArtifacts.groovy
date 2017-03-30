@@ -1,4 +1,4 @@
-package com.novoda.gradle.release
+package com.aaron.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.Jar
@@ -7,13 +7,20 @@ import org.gradle.api.tasks.javadoc.Javadoc
 class AndroidArtifacts implements Artifacts {
 
     def variant
+    def propertyFinder
 
-    AndroidArtifacts(variant) {
+    AndroidArtifacts(variant,PropertyFinder propertyFinder) {
         this.variant = variant
+        this.propertyFinder = propertyFinder
     }
 
     def all(String publicationName, Project project) {
-        [sourcesJar(project), javadocJar(project), mainJar(project)]
+        if(propertyFinder.getArchives()!=null){
+            [propertyFinder.getArchives(), javadocJar(project)]
+        } else {
+            [sourcesJar(project), javadocJar(project), mainJar(project)]
+        }
+
     }
 
     def sourcesJar(Project project) {

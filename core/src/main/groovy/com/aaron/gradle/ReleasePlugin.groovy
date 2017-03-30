@@ -1,4 +1,4 @@
-package com.novoda.gradle.release
+package com.aaron.gradle
 
 import com.jfrog.bintray.gradle.BintrayPlugin
 import org.gradle.api.Plugin
@@ -21,7 +21,9 @@ class ReleasePlugin implements Plugin<Project> {
         if (project.plugins.hasPlugin('com.android.library')) {
             project.android.libraryVariants.each { variant ->
                 def artifactId = extension.artifactId;
-                addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant))
+                PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
+
+                addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant,propertyFinder),propertyFinder)
             }
         } else {
             addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts())
@@ -29,8 +31,7 @@ class ReleasePlugin implements Plugin<Project> {
     }
 
 
-    void addArtifact(Project project, String name, String artifact, Artifacts artifacts) {
-        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
+    void addArtifact(Project project, String name, String artifact, Artifacts artifacts,PropertyFinder propertyFinder) {
         project.publishing.publications.create(name, MavenPublication) {
             groupId project.publish.groupId
             artifactId artifact
