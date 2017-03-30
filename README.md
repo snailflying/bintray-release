@@ -56,10 +56,11 @@ allprojects {
 tasks.getByPath(":library模块:releaseAndroidJavadocs").enabled = false
 
 2.忽略错误信息：moudel的build.gradle
+```groovy
 android {
-******
-******
  lintOptions {
         abortOnError false
     }
 }
+```
+
