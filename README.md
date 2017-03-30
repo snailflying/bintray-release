@@ -17,7 +17,7 @@ Super duper easy way to release your Android and other artifacts to bintray.
 ```groovy
 classpath 'com.aaron.gradle:bintray-release:1.0.0'
 ```
-*2.library的moudel中加入 apply*
+*2.library的module中加入 apply*
 ```groovy
 apply plugin: 'com.aaron.gradle.bintray-release'
 ```
