@@ -7,6 +7,7 @@ Super duper easy way to release your Android and other artifacts to bintray.
 此项目基于[Github Novoda](https://github.com/novoda/bintray-release)修改而来。
 改进点：
 在publish内新增archives参数，可上传指定的jar包或者aar包。
+
 这样我们便可以很容易上传自己生成的jar，比如混淆过的。
 
 ## 新增依赖
@@ -40,6 +41,7 @@ $ ./gradlew bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KE
 ```
 ## 常见错误排除
 1.如果你开源库中有中文注释在moudel的build.gradle加入格式
+
 allprojects {
     repositories {
         jcenter()
@@ -52,7 +54,9 @@ allprojects {
         }
     }
 }
+
 根目录下的build.gradle中增加
+
 tasks.getByPath(":library模块:releaseAndroidJavadocs").enabled = false
 
 2.忽略错误信息：moudel的build.gradle
