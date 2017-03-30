@@ -1,35 +1,25 @@
-# bintray-release [![](https://ci.novoda.com/buildStatus/icon?job=bintray-release)](https://ci.novoda.com/job/bintray-release/lastBuild/console) [![Download](https://api.bintray.com/packages/novoda/maven/bintray-release/images/download.svg) ](https://bintray.com/novoda/maven/bintray-release/_latestVersion) [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
 
 Super duper easy way to release your Android and other artifacts to bintray.
 
 
-## Description
+## 介绍
 
-This is a helper for releasing libraries to bintray. It is intended to help configuring stuff related to maven and bintray.
-At the moment it works with Android Library projects, plain Java and plain Groovy projects, but our focus is to mainly support Android projects.
+此项目基于[Github Novoda](https://github.com/novoda/bintray-release)修改而来。
+改进点：
+在publish内新增archives参数，可上传指定的jar包或者aar包。
+这样我们便可以很容易上传自己生成的jar，比如混淆过的。
 
+## 新增依赖
 
-## Adding to project
-
-To publish a library to bintray using this plugin, add these dependencies to the `build.gradle` of the module that will be published:
-
-```groovy
-apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.novoda:bintray-release:<latest-version>
-    }
-}
-```
+*1.根目录下的build.gradle中加入上传开源库的依赖：*
+classpath 'com.aaron.gradle:bintray-release:1.0.0'
+*2.library的moudel中加入 apply*
+apply plugin: 'com.aaron.gradle.bintray-release'
 
 
-## Simple usage
+## 简单使用
 
-Use the `publish` closure to set the info of your package:
+利用 `publish` 闭包完成相应设置:
 
 ```groovy
 publish {
@@ -37,25 +27,39 @@ publish {
     groupId = 'com.novoda'
     artifactId = 'bintray-release'
     publishVersion = '0.3.4'
+    archives file('build/outputs/test.jar') //指定将要上传的jar包，如果不写则默认上传系统生成的jar和aar
     desc = 'Oh hi, this is a nice description for a project, right?'
-    website = 'https://github.com/novoda/bintray-release'
+    website = 'https://github.com/snailflying/bintray-release'
 }
 ```
 
-Finally, use the task `bintrayUpload` to publish (make sure you build the project first!):
+最后，利用 task `bintrayUpload` 完成上传 (确保已提前在指定位置生成了相应jar包!):
 
 ```bash
-$ ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
+$ ./gradlew bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
 ```
+## 常见错误排除
+1.如果你开源库中有中文注释在moudel的build.gradle加入格式
+allprojects {
+    repositories {
+        jcenter()
+    }
+    //加上这些
+    tasks.withType(Javadoc) {
+        options{ encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+    }
+}
+根目录下的build.gradle中增加
+tasks.getByPath(":library模块:releaseAndroidJavadocs").enabled = false
 
-More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/bintray-release/wiki).
-
-
-## Links
-
-Here are a list of useful links:
-
- * We always welcome people to contribute new features or bug fixes, [here is how](https://github.com/novoda/novoda/blob/master/CONTRIBUTING.md)
- * If you have a problem check the [Issues Page](https://github.com/novoda/bintray-release/issues) first to see if we are working on it
- * For further usage or to delve more deeply checkout the [Project Wiki](https://github.com/novoda/bintray-release/wiki)
- * Looking for community help, browse the already asked [Stack Overflow Questions](http://stackoverflow.com/questions/tagged/support-bintray-release) or use the tag: `support-bintray-release` when posting a new question  
+2.忽略错误信息：moudel的build.gradle
+android {
+******
+******
+ lintOptions {
+        abortOnError false
+    }
+}
