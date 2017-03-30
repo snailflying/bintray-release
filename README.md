@@ -44,7 +44,7 @@ publish {
 $ ./gradlew bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
 ```
 ## 常见错误排除
-*1.如果你开源库中有中文注释在moudel的build.gradle加入格式*
+*1.如果你开源库中有中文注释在module的build.gradle加入格式*
 ```groovy
 allprojects {
     repositories {
@@ -64,7 +64,7 @@ allprojects {
 tasks.getByPath(":library模块:releaseAndroidJavadocs").enabled = false
 ```
 
-*2.忽略错误信息：moudel的build.gradle*
+*2.忽略错误信息：module的build.gradle*
 ```groovy
 android {
  lintOptions {
