@@ -7,16 +7,18 @@ import org.gradle.api.tasks.javadoc.Javadoc
 class AndroidArtifacts implements Artifacts {
 
     def variant
-    def propertyFinder
+    def PropertyFinder propertyFinder
 
-    AndroidArtifacts(variant,PropertyFinder propertyFinder) {
+    AndroidArtifacts(variant, PropertyFinder propertyFinder) {
         this.variant = variant
         this.propertyFinder = propertyFinder
     }
 
     def all(String publicationName, Project project) {
-        if(propertyFinder.getArchives()!=null){
-            [propertyFinder.getArchives(), javadocJar(project)]
+        if (propertyFinder.getArchives() != null && propertyFinder.getArchives().size() > 1) {
+            [propertyFinder.getArchives()[0], propertyFinder.getArchives()[1], javadocJar(project)]
+        } else if (propertyFinder.getArchives() != null && propertyFinder.getArchives().size() > 0) {
+            [propertyFinder.getArchives()[0], javadocJar(project)]
         } else {
             [sourcesJar(project), javadocJar(project), mainJar(project)]
         }

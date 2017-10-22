@@ -9,7 +9,7 @@ class PublishExtension {
     String artifactId
 
     /**
-     *  @deprecated due to conflicts with gradle project.version. replaced by {@link #publishVersion}
+     * @deprecated due to conflicts with gradle project.version. replaced by {@link #publishVersion}
      *  https://github.com/novoda/bintray-release/issues/43
      */
     @Deprecated
@@ -23,13 +23,17 @@ class PublishExtension {
     String uploadName = ''
 
     /**
-     *  @deprecated due to conflicts with gradle project.description. replaced by {@link #desc}
+     * @deprecated due to conflicts with gradle project.description. replaced by {@link #desc}
      *  https://github.com/novoda/bintray-release/issues/46
      */
     @Deprecated
     String description
     String desc
-    File archives
+    String archivesPath
+    String archivesName
+//    FileTree archivesFileTree
+//    File archiveJar
+//    File archiveAar
 
     String website = ''
     String issueTracker = ''
