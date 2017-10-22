@@ -37,24 +37,29 @@ class PropertyFinder {
         getFiles(project, extension.archivesPath, extension.archivesName)
     }
 
+    File getArchive() {
+        extension.archives
+    }
+
     private String getString(Project project, String propertyName, String defaultValue) {
         project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
     }
 
     private FileCollection getFiles(Project project, String archivePath, String archiveName) {
-        if (archivePath != null) {
+        def path = project.hasProperty(archivePath) ? project.getProperty(archivePath) : archivePath
+        if (path != null) {
             if (archiveName != null) {
-                return project.fileTree(dir: archivePath).filter {
+                return project.fileTree(dir: path).filter {
                     (it.name.endsWith(FILE_EXTENSION_JAR) || it.name.endsWith(FILE_EXTENSION_AAR)) &&
                             isNameContains(it, archiveName)
                 }
             } else if (extension.artifactId != null) {
-                return project.fileTree(dir: archivePath).filter {
+                return project.fileTree(dir: path).filter {
                     (it.name.endsWith(FILE_EXTENSION_JAR) || it.name.endsWith(FILE_EXTENSION_AAR)) &&
                             isNameContains(it, extension.artifactId)
                 }
             } else {
-                return project.fileTree(dir: archivePath).filter {
+                return project.fileTree(dir: path).filter {
                     it.name.endsWith(FILE_EXTENSION_JAR) || it.name.endsWith(FILE_EXTENSION_AAR)
                 }
             }

@@ -32,7 +32,8 @@ class PublishExtension {
     String archivesPath
     String archivesName
 //    FileTree archivesFileTree
-//    File archiveJar
+    @Deprecated
+    File archives
 //    File archiveAar
 
     String website = ''

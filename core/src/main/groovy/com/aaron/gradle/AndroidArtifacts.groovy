@@ -15,10 +15,15 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def all(String publicationName, Project project) {
-        if (propertyFinder.getArchives() != null && propertyFinder.getArchives().size() > 1) {
-            [propertyFinder.getArchives()[0], propertyFinder.getArchives()[1], javadocJar(project)]
-        } else if (propertyFinder.getArchives() != null && propertyFinder.getArchives().size() > 0) {
-            [propertyFinder.getArchives()[0], javadocJar(project)]
+        if (propertyFinder.getArchives() != null && propertyFinder.getArchives().size() > 0) {
+            def archive = propertyFinder.getArchives().asList()
+            archive.add(javadocJar(project))
+            return archive
+//            [propertyFinder.getArchives()[0], propertyFinder.getArchives()[1], javadocJar(project)]
+//        } else if (propertyFinder.getArchives() != null && propertyFinder.getArchives().size() > 0) {
+//            [propertyFinder.getArchives()[0], javadocJar(project)]
+        } else if (propertyFinder.getArchive() != null) {
+            [propertyFinder.getArchive(), javadocJar(project)]
         } else {
             [sourcesJar(project), javadocJar(project), mainJar(project)]
         }

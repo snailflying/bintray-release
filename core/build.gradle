@@ -24,7 +24,7 @@ uploadArchives{
             repository(url:uri('../repo'))
             pom.groupId = 'com.aaron.gradle' // 组名
             pom.artifactId = 'bintray-release' // 插件名
-            pom.version = '1.2.6' // 版本号
+            pom.version = '1.2.8' // 版本号
         }
     }
 }
@@ -33,7 +33,7 @@ publish {
     userOrg = 'bravoon'
     groupId = 'com.aaron.gradle'
     artifactId = rootProject.name
-    version = '1.2.6'
+    version = '1.2.8'
     description = 'Super duper easy way to release your Android and other artifacts to bintray'
     website = "https://github.com/snailflying/${rootProject.name}"
 }
