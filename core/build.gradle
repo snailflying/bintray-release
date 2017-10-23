@@ -18,22 +18,22 @@ compileGroovy {
 
 
 // 在本地生成文件库
-uploadArchives{
-    repositories{
-        mavenDeployer{
-            repository(url:uri('../repo'))
-            pom.groupId = 'com.aaron.gradle' // 组名
-            pom.artifactId = 'bintray-release' // 插件名
-            pom.version = '1.2.8' // 版本号
-        }
-    }
-}
+//uploadArchives{
+//    repositories{
+//        mavenDeployer{
+//            repository(url:uri('../repo'))
+//            pom.groupId = 'com.aaron.gradle' // 组名
+//            pom.artifactId = 'bintray-release' // 插件名
+//            pom.version = '1.2.9' // 版本号
+//        }
+//    }
+//}
 //./gradlew bintrayUpload -PbintrayUser=bravoon -PbintrayKey=5f3ae2ec0cf6d6567d1214936ff15e328de263fe -PdryRun=false
 publish {
     userOrg = 'bravoon'
     groupId = 'com.aaron.gradle'
     artifactId = rootProject.name
-    version = '1.2.8'
+    version = '1.2.9'
     description = 'Super duper easy way to release your Android and other artifacts to bintray'
     website = "https://github.com/snailflying/${rootProject.name}"
 }
