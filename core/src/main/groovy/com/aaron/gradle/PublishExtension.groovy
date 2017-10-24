@@ -29,8 +29,8 @@ class PublishExtension {
     @Deprecated
     String description
     String desc
-    String archivesPath
-    String archivesName
+    String archivesPath = ''
+    String archivesName = ''
 //    FileTree archivesFileTree
     @Deprecated
     File archives

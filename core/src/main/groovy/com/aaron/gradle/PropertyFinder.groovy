@@ -34,7 +34,7 @@ class PropertyFinder {
     }
 
     FileCollection getArchives() {
-        getFiles(project, extension.archivesPath, extension.archivesName)
+        getFiles(project, 'archivesPath', extension.archivesPath, extension.archivesName)
     }
 
     File getArchive() {
@@ -45,8 +45,8 @@ class PropertyFinder {
         project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
     }
 
-    private FileCollection getFiles(Project project, String archivePath, String archiveName) {
-        def path = project.hasProperty(archivePath) ? project.getProperty(archivePath) : archivePath
+    private FileCollection getFiles(Project project, String propertyName, String archivePath, String archiveName) {
+        def path = project.hasProperty(propertyName) ? project.getProperty(propertyName) : archivePath
         if (path != null) {
             if (archiveName != null) {
                 return project.fileTree(dir: path).filter {
