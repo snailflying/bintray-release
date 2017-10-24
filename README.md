@@ -7,7 +7,7 @@ Super duper easy way to release your Android and other artifacts to bintray.
 此项目基于[Github Novoda](https://github.com/novoda/bintray-release)修改而来。
 改进点：
 
-在publish内新增archives参数，可上传指定的jar包或者aar包。
+在publish内新增archivesPath参数，可将指定的jar包或者aar包放在此目录下，会指定上传此目录内的压缩包。
 
 这样我们便可以很容易上传自己生成的jar，比如混淆过的。
 
@@ -32,7 +32,8 @@ publish {
     groupId = 'com.novoda'
     artifactId = 'bintray-release'
     publishVersion = '0.3.4'
-    archives file('build/outputs/test.jar') //指定将要上传的jar包，如果不写则默认上传系统生成的jar和aar
+    archivesPath = '../build/outputs' //指定将要上传的压缩包路径，如果不写则默认上传系统生成的jar和aar
+    archivesName = 'bintray-release'  //指定将要上传的压缩包所含的关键字，如果不写，默认过滤artifactId
     desc = 'Oh hi, this is a nice description for a project, right?'
     website = 'https://github.com/snailflying/bintray-release'
 }
