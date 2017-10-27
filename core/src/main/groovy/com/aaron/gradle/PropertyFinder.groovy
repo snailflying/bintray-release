@@ -47,7 +47,7 @@ class PropertyFinder {
 
     private FileCollection getFiles(Project project, String propertyName, String archivePath, String archiveName) {
         def path = project.hasProperty(propertyName) ? project.getProperty(propertyName) : archivePath
-        if (path != null) {
+        if (path) {
             if (archiveName != null) {
                 return project.fileTree(dir: path).filter {
                     (it.name.endsWith(FILE_EXTENSION_JAR) || it.name.endsWith(FILE_EXTENSION_AAR)) &&
