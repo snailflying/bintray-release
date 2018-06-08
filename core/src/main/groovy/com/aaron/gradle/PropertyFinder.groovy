@@ -41,7 +41,7 @@ class PropertyFinder {
         extension.archives
     }
 
-    private String getString(Project project, String propertyName, String defaultValue) {
+    private static String getString(Project project, String propertyName, String defaultValue) {
         project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
     }
 
@@ -68,11 +68,11 @@ class PropertyFinder {
         }
     }
 
-    private boolean getBoolean(Project project, String propertyName, boolean defaultValue) {
+    private static boolean getBoolean(Project project, String propertyName, boolean defaultValue) {
         project.hasProperty(propertyName) ? Boolean.parseBoolean(project.getProperty(propertyName)) : defaultValue
     }
 
-    private boolean isNameContains(File file, String archiveName) {
+    private static boolean isNameContains(File file, String archiveName) {
         return file.name.substring(0, file.name.length() - FILE_EXTENSION_JAR.length()).contains(archiveName)
     }
 

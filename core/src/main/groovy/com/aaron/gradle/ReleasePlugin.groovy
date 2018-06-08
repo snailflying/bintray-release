@@ -19,19 +19,19 @@ class ReleasePlugin implements Plugin<Project> {
 
     void attachArtifacts(PublishExtension extension, Project project) {
         if (project.plugins.hasPlugin('com.android.library')) {
-            project.android.libraryVariants.each { variant ->
-                def artifactId = extension.artifactId;
+            project.android.libraryVariants.all { variant ->
+                def artifactId = extension.artifactId
                 PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
-
                 addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant,propertyFinder),propertyFinder)
             }
         } else {
-            addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts())
+            PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
+            addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts(),propertyFinder)
         }
     }
 
-
     void addArtifact(Project project, String name, String artifact, Artifacts artifacts,PropertyFinder propertyFinder) {
+//        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
         project.publishing.publications.create(name, MavenPublication) {
             groupId project.publish.groupId
             artifactId artifact
