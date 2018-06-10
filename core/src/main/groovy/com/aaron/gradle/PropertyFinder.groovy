@@ -1,7 +1,7 @@
 package com.aaron.gradle
 
 import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
+import org.gradle.api.file.FileCollection;
 
 class PropertyFinder {
 
@@ -9,8 +9,10 @@ class PropertyFinder {
     private final PublishExtension extension
 
 
+    //start archivesPath aaron
     private static final String FILE_EXTENSION_JAR = ".jar"
     private static final String FILE_EXTENSION_AAR = ".aar"
+    //end
 
     PropertyFinder(Project project, PublishExtension extension) {
         this.extension = extension
@@ -29,20 +31,17 @@ class PropertyFinder {
         getBoolean(project, 'dryRun', extension.dryRun)
     }
 
-    def getPublishVersion() {
-        getString(project, 'publishVersion', extension.publishVersion ?: extension.version)
+    def getOverride() {
+        getBoolean(project, 'override', extension.override)
     }
 
+    def getPublishVersion() {
+        getString(project, 'publishVersion', extension.publishVersion)
+    }
+
+    //start archivesPath aaron
     FileCollection getArchives() {
         getFiles(project, 'archivesPath', extension.archivesPath, extension.archivesName)
-    }
-
-    File getArchive() {
-        extension.archives
-    }
-
-    private static String getString(Project project, String propertyName, String defaultValue) {
-        project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
     }
 
     private FileCollection getFiles(Project project, String propertyName, String archivePath, String archiveName) {
@@ -68,13 +67,16 @@ class PropertyFinder {
         }
     }
 
-    private static boolean getBoolean(Project project, String propertyName, boolean defaultValue) {
-        project.hasProperty(propertyName) ? Boolean.parseBoolean(project.getProperty(propertyName)) : defaultValue
-    }
-
     private static boolean isNameContains(File file, String archiveName) {
         return file.name.substring(0, file.name.length() - FILE_EXTENSION_JAR.length()).contains(archiveName)
     }
+    //end
 
+    private String getString(Project project, String propertyName, String defaultValue) {
+        project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
+    }
 
+    private boolean getBoolean(Project project, String propertyName, boolean defaultValue) {
+        project.hasProperty(propertyName) ? Boolean.parseBoolean(project.getProperty(propertyName)) : defaultValue
+    }
 }

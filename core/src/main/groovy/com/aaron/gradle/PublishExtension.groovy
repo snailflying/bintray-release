@@ -1,5 +1,18 @@
 package com.aaron.gradle
 
+import groovy.transform.PackageScope
+
+/**
+ * A gradle extension which will be used to configure the plugin.
+ *
+ * Most of the properties will be used to setup the `bintray-Extension` in BintrayConfiguration.
+ * See also: https://github.com/bintray/gradle-bintray-plugin#plugin-dsl
+ *
+ * Some properties are mandatory and have to be validated before any action on it happen.
+ * The other ones are all optional or provide a default value.
+ *
+ * Optional doesn't mean they aren't needed but that they will handled correctly by the plugin!
+ */
 class PublishExtension {
 
     String repoName = 'maven'
@@ -8,13 +21,7 @@ class PublishExtension {
     String groupId
     String artifactId
 
-    /**
-     * @deprecated due to conflicts with gradle project.version. replaced by {@link #publishVersion}
-     *  https://github.com/novoda/bintray-release/issues/43
-     */
-    @Deprecated
-    String version
-    String publishVersion;
+    String publishVersion
 
     Map<String, String> versionAttributes = [:]
 
@@ -22,19 +29,14 @@ class PublishExtension {
 
     String uploadName = ''
 
-    /**
-     * @deprecated due to conflicts with gradle project.description. replaced by {@link #desc}
-     *  https://github.com/novoda/bintray-release/issues/46
-     */
-    @Deprecated
-    String description
     String desc
+
+    //start archivesPath aaron
+    // 路径
     String archivesPath = ''
+    //关键字
     String archivesName = ''
-//    FileTree archivesFileTree
-    @Deprecated
-    File archives
-//    File archiveAar
+    //end
 
     String website = ''
     String issueTracker = ''
@@ -44,7 +46,38 @@ class PublishExtension {
     String bintrayUser = ''
     String bintrayKey = ''
     boolean dryRun = true
+    boolean override = false
 
     String[] publications
+
+    /**
+     * Validate all mandatory properties for this extension.
+     *
+     * Will throw a Exception if not setup correctly.
+     */
+    @PackageScope
+    void validate() {
+        String extensionError = "";
+        if (userOrg == null) {
+            extensionError += "Missing userOrg. "
+        }
+        if (groupId == null) {
+            extensionError += "Missing groupId. "
+        }
+        if (artifactId == null) {
+            extensionError += "Missing artifactId. "
+        }
+        if (publishVersion == null) {
+            extensionError += "Missing publishVersion. "
+        }
+        if (desc == null) {
+            extensionError += "Missing desc. "
+        }
+
+        if (extensionError) {
+            String prefix = "Have you created the publish closure? "
+            throw new IllegalStateException(prefix + extensionError)
+        }
+    }
 
 }

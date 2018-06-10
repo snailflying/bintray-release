@@ -1,14 +1,20 @@
-apply plugin: 'com.novoda.bintray-release'
-apply plugin: 'groovy'
-apply plugin: 'maven'
+plugins {
+    id 'com.novoda.bintray-release' version "0.8.0"
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'maven'
+}
+
+repositories {
+    jcenter()
+}
 
 dependencies {
-    compile gradleApi()
     compile localGroovy()
-    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2'
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
 
-    testCompile gradleTestKit()
     testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.9.0'
 }
 
 compileGroovy {
@@ -16,24 +22,33 @@ compileGroovy {
     targetCompatibility = '1.6'
 }
 
+gradlePlugin {
+    plugins {
+        binrayRelease {
+            id = "com.aaron.gradle.bintray-release"
+            implementationClass = "com.aaron.gradle.ReleasePlugin"
+        }
+        legacy {
+            id = "bintray-release"
+            implementationClass = "com.aaron.gradle.ReleasePlugin"
+        }
+    }
+}
 
-// 在本地生成文件库
-//uploadArchives{
-//    repositories{
-//        mavenDeployer{
-//            repository(url:uri('../repo'))
-//            pom.groupId = 'com.aaron.gradle' // 组名
-//            pom.artifactId = 'bintray-release' // 插件名
-//            pom.version = '1.2.9' // 版本号
-//        }
-//    }
+//publish {
+//    userOrg = 'novoda'
+//    groupId = 'com.novoda'
+//    artifactId = rootProject.name
+//    publishVersion = '0.8.1'
+//    desc = 'Super duper easy way to gradle your Android and other artifacts to bintray'
+//    website = "https://github.com/novoda/${rootProject.name}"
 //}
-//./gradlew bintrayUpload -PbintrayUser=bravoon -PbintrayKey=5f3ae2ec0cf6d6567d1214936ff15e328de263fe -PdryRun=false
 publish {
     userOrg = 'bravoon'
     groupId = 'com.aaron.gradle'
     artifactId = rootProject.name
-    version = '1.3.4'
-    description = 'Super duper easy way to release your Android and other artifacts to bintray'
+    version = '1.3.7'
+    description = 'Super duper easy way to gradle your Android and other artifacts to bintray'
     website = "https://github.com/snailflying/${rootProject.name}"
 }
+//./gradlew bintrayUpload -PbintrayUser=bravoon -PbintrayKey=5f3ae2ec0cf6d6567d1214936ff15e328de263fe -PdryRun=false

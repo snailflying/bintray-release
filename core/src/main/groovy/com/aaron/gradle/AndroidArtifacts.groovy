@@ -7,28 +7,27 @@ import org.gradle.api.tasks.javadoc.Javadoc
 class AndroidArtifacts implements Artifacts {
 
     def variant
-    def PropertyFinder propertyFinder
 
-    AndroidArtifacts(variant, PropertyFinder propertyFinder) {
+    AndroidArtifacts(variant) {
         this.variant = variant
-        this.propertyFinder = propertyFinder
     }
 
+    //start archivesPath aaron
+//    def all(String publicationName, Project project) {
+//        [sourcesJar(project), javadocJar(project), mainJar(project)]
+//    }
     def all(String publicationName, Project project) {
+        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
         if (propertyFinder.getArchives() != null && propertyFinder.getArchives().size() > 0) {
             def archive = propertyFinder.getArchives().asList()
             archive.add(javadocJar(project))
             return archive
-//            [propertyFinder.getArchives()[0], propertyFinder.getArchives()[1], javadocJar(project)]
-//        } else if (propertyFinder.getArchives() != null && propertyFinder.getArchives().size() > 0) {
-//            [propertyFinder.getArchives()[0], javadocJar(project)]
-        } else if (propertyFinder.getArchive() != null) {
-            [propertyFinder.getArchive(), javadocJar(project)]
         } else {
             [sourcesJar(project), javadocJar(project), mainJar(project)]
         }
 
     }
+    //end
 
     def sourcesJar(Project project) {
         project.task(variant.name + 'AndroidSourcesJar', type: Jar) {
@@ -56,11 +55,12 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def mainJar(Project project) {
-        "$project.buildDir/outputs/aar/${project.name}-${variant.baseName}.aar"
+        def archiveBaseName = project.hasProperty("archivesBaseName") ? project.getProperty("archivesBaseName") : project.name
+        "$project.buildDir/outputs/aar/$archiveBaseName-${variant.baseName}.aar"
     }
 
     def from(Project project) {
-        project.components.add(AndroidLibrary.newInstance(project))
+        project.components.add(new AndroidLibrary(project))
         project.components.android
     }
 

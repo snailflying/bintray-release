@@ -7,9 +7,11 @@ import org.gradle.api.publish.maven.MavenPublication
 
 class ReleasePlugin implements Plugin<Project> {
 
+    @Override
     void apply(Project project) {
         PublishExtension extension = project.extensions.create('publish', PublishExtension)
         project.afterEvaluate {
+            extension.validate()
             project.apply([plugin: 'maven-publish'])
             attachArtifacts(extension, project)
             new BintrayPlugin().apply(project)
@@ -20,18 +22,17 @@ class ReleasePlugin implements Plugin<Project> {
     void attachArtifacts(PublishExtension extension, Project project) {
         if (project.plugins.hasPlugin('com.android.library')) {
             project.android.libraryVariants.all { variant ->
-                def artifactId = extension.artifactId
-                PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
-                addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant,propertyFinder),propertyFinder)
+                def artifactId = extension.artifactId;
+                addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant))
             }
         } else {
-            PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
-            addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts(),propertyFinder)
+            addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts())
         }
     }
 
-    void addArtifact(Project project, String name, String artifact, Artifacts artifacts,PropertyFinder propertyFinder) {
-//        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
+
+    void addArtifact(Project project, String name, String artifact, Artifacts artifacts) {
+        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
         project.publishing.publications.create(name, MavenPublication) {
             groupId project.publish.groupId
             artifactId artifact

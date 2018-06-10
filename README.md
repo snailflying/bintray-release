@@ -1,5 +1,5 @@
 
-Super duper easy way to release your Android and other artifacts to bintray.
+Super duper easy way to gradle your Android and other artifacts to bintray.
 
 
 ## 介绍
@@ -15,7 +15,7 @@ Super duper easy way to release your Android and other artifacts to bintray.
 
 **1.根目录下的build.gradle中加入上传开源库的依赖：**
 ```groovy
-classpath 'com.aaron.gradle:bintray-release:1.3.4'
+classpath 'com.aaron.gradle:bintray-release:1.3.7'
 ```
 **2.library的module中加入 apply**
 ```groovy
@@ -24,7 +24,6 @@ apply plugin: 'com.aaron.gradle.bintray-release'//必须写在第一行
 ```
 
 ## 简单使用
-
 利用 `publish` 闭包完成相应设置:
 
 ```groovy
@@ -74,4 +73,3 @@ android {
     }
 }
 ```
-
