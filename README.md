@@ -15,11 +15,12 @@ Super duper easy way to release your Android and other artifacts to bintray.
 
 **1.根目录下的build.gradle中加入上传开源库的依赖：**
 ```groovy
-classpath 'com.aaron.gradle:bintray-release:1.3.1'
+classpath 'com.aaron.gradle:bintray-release:1.3.4'
 ```
 **2.library的module中加入 apply**
 ```groovy
-apply plugin: 'com.aaron.gradle.bintray-release'
+apply plugin: 'com.aaron.gradle.bintray-release'//必须写在第一行
+//其他插件
 ```
 
 ## 简单使用
