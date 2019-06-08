@@ -9,15 +9,27 @@ if (!hasProperty("publishLocal")) {
 //PUBLISH_ARTIFACT_ID  模块名
 
 apply plugin: 'maven'
+def getLocalProperties() {
+    def localProperties = new Properties()
+    InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
+    localProperties.load(inputStream)
+    return localProperties
+}
 
-def getArtifactId() {
-    return hasProperty('PUBLISH_ARTIFACT_ID') ? PUBLISH_ARTIFACT_ID : ""
+def getPublishGroupId() {
+    def localGroupId = localProperties.getProperty('PUBLISH_GROUP_ID', "cn.theone")
+    return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : localGroupId
 }
-def getGroupId() {
-    return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : "cn.theone"
+def getPublishArtifactId() {
+    def localArtifactId = localProperties.getProperty('PUBLISH_ARTIFACT_ID', "")
+    return hasProperty('PUBLISH_ARTIFACT_ID') ? PUBLISH_ARTIFACT_ID : localArtifactId
 }
-def getVersionName() {
-    return hasProperty('PUBLISH_VERSION_NAME') ? PUBLISH_VERSION_NAME : "1.0.0"
+//PUBLISH_VERSION_NAME>Local PUBLISH_VERSION_NAME > Local VERSION_NAME > VERSION_NAME
+def getPublishVersionName() {
+    def temVersionName = hasProperty('VERSION_NAME') ? VERSION_NAME : "1.0.0"
+    def localVersionName = localProperties.getProperty('VERSION_NAME', temVersionName)
+    def localPublishVersionName = localProperties.getProperty('PUBLISH_VERSION_NAME', localVersionName)
+    return hasProperty('PUBLISH_VERSION_NAME') ? PUBLISH_VERSION_NAME : localPublishVersionName
 }
 
 uploadArchives {
@@ -25,9 +37,9 @@ uploadArchives {
         mavenDeployer {
             repository(url: uri("${System.properties['user.home']}/.gradle/local_repo"))
 
-            pom.version=getVersionName()
-            pom.artifactId=getArtifactId()
-            pom.groupId=getGroupId()
+            pom.version=getPublishVersionName()
+            pom.artifactId=getPublishArtifactId()
+            pom.groupId=getPublishGroupId()
         }
     }
 }

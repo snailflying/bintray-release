@@ -13,38 +13,58 @@ if (!hasProperty("publishJcenter")) {
 
 apply plugin: 'com.novoda.bintray-release'
 
-def getBintrayUser() {
-    return hasProperty('BINTRAY_USER') ? BINTRAY_USER : ""
+def getLocalProperties() {
+    def localProperties = new Properties()
+    InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
+    localProperties.load(inputStream)
+    return localProperties
 }
 
-def getBintrayKey() {
-    return hasProperty('BINTRAY_KEY') ? BINTRAY_KEY : ""
+def getPublishBintrayUser() {
+    def localUser = localProperties.getProperty('BINTRAY_USER', "")
+    return hasProperty('BINTRAY_USER') ? BINTRAY_USER : localUser
 }
 
-def getArtifactId() {
-    return hasProperty('PUBLISH_ARTIFACT_ID') ? PUBLISH_ARTIFACT_ID : ""
+def getPublishBintrayKey() {
+    def localKey = localProperties.getProperty('BINTRAY_KEY', "")
+    return hasProperty('BINTRAY_KEY') ? BINTRAY_KEY : localKey
 }
 
-def getGroupId() {
-    return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : "cn.theone"
+def getPublishGroupId() {
+    def localGroupId = localProperties.getProperty('PUBLISH_GROUP_ID', "cn.theone")
+    return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : localGroupId
+}
+def getPublishArtifactId() {
+    def localArtifactId = localProperties.getProperty('PUBLISH_ARTIFACT_ID', "")
+    return hasProperty('PUBLISH_ARTIFACT_ID') ? PUBLISH_ARTIFACT_ID : localArtifactId
+}
+//PUBLISH_VERSION_NAME>Local PUBLISH_VERSION_NAME > Local VERSION_NAME > VERSION_NAME
+def getPublishVersionName() {
+    def temVersionName = hasProperty('VERSION_NAME') ? VERSION_NAME : "1.0.0"
+    def localVersionName = localProperties.getProperty('VERSION_NAME', temVersionName)
+    def localPublishVersionName = localProperties.getProperty('PUBLISH_VERSION_NAME', localVersionName)
+    return hasProperty('PUBLISH_VERSION_NAME') ? PUBLISH_VERSION_NAME : localPublishVersionName
 }
 
-def getVersionName() {
-    return hasProperty('PUBLISH_VERSION_NAME') ? PUBLISH_VERSION_NAME : "1.0.0"
+def getPublishDescription() {
+    def localPublishVersionName = localProperties.getProperty('PUBLISH_DESCRIPTION', "the library of liuzhiqiang")
+    return hasProperty('PUBLISH_DESCRIPTION') ? PUBLISH_DESCRIPTION : localPublishVersionName
 }
+def getPublishWebsiteUrl() {
+    def localGithub = localProperties.getProperty('PUBLISH_JCENTER_GITHUB_REPOSITORIES_NAME', "")
+    def github = hasProperty('PUBLISH_JCENTER_GITHUB_REPOSITORIES_NAME') ? PUBLISH_JCENTER_GITHUB_REPOSITORIES_NAME : localGithub
 
-def getWebsiteUrl() {
-    return "https://github.com/snailflying/${PUBLISH_JCENTER_GITHUB_REPOSITORIES_NAME}"
+    return "https://github.com/snailflying/${github}"
 }
 
 publish {
-    bintrayUser = getBintrayUser()
-    bintrayKey = getBintrayKey()
+    bintrayUser = getPublishBintrayUser()
+    bintrayKey = getPublishBintrayKey()
     dryRun = false
     userOrg = 'bravoon'
-    groupId = getGroupId()
-    artifactId = getArtifactId()
-    publishVersion = getVersionName()
-    desc = getDescription()
-    website = getWebsiteUrl()
+    groupId = getPublishGroupId()
+    artifactId = getPublishArtifactId()
+    publishVersion = getPublishVersionName()
+    desc = getPublishDescription()
+    website = getPublishWebsiteUrl()
 }

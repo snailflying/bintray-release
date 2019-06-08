@@ -12,41 +12,61 @@ apply plugin:'maven'
 //PUBLISH_GROUP_ID = "cn.theone" 组
 //PUBLISH_VERSION_NAME = "1.1.5" 版本号
 //PUBLISH_IS_RELEASE = true 是否上传release仓库
+def getLocalProperties() {
+    def localProperties = new Properties()
+    InputStream inputStream = project.rootProject.file('local.properties').newDataInputStream()
+    localProperties.load(inputStream)
+    return localProperties
+}
+
 def getRepositoryUsername() {
-    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+    def localUser = localProperties.getProperty('NEXUS_USERNAME', "")
+    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : localUser
 }
 def getRepositoryPassword() {
-    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
+    def localPassword = localProperties.getProperty('NEXUS_PASSWORD', "")
+    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : localPassword
 }
+
+def getPublishGroupId() {
+    def localGroupId = localProperties.getProperty('PUBLISH_GROUP_ID', "cn.theone")
+    return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : localGroupId
+}
+def getPublishArtifactId() {
+    def localArtifactId = localProperties.getProperty('PUBLISH_ARTIFACT_ID', "")
+    return hasProperty('PUBLISH_ARTIFACT_ID') ? PUBLISH_ARTIFACT_ID : localArtifactId
+}
+//PUBLISH_VERSION_NAME>Local PUBLISH_VERSION_NAME > Local VERSION_NAME > VERSION_NAME
+def getPublishVersionName() {
+    def temVersionName = hasProperty('VERSION_NAME') ? VERSION_NAME : "1.0.0"
+    def localVersionName = localProperties.getProperty('VERSION_NAME', temVersionName)
+    def localPublishVersionName = localProperties.getProperty('PUBLISH_VERSION_NAME', localVersionName)
+    return hasProperty('PUBLISH_VERSION_NAME') ? PUBLISH_VERSION_NAME : localPublishVersionName
+}
+
 def getReleaseRepositoryUrl() {
-    return hasProperty('PUBLISH_RELEASE_REPOSITORY_URL') ? PUBLISH_RELEASE_REPOSITORY_URL : ""
+    def localReleaseRepositoryUrl = localProperties.getProperty('PUBLISH_RELEASE_REPOSITORY_URL', "")
+    return hasProperty('PUBLISH_RELEASE_REPOSITORY_URL') ? PUBLISH_RELEASE_REPOSITORY_URL : localReleaseRepositoryUrl
 }
 def getSnapshotRepositoryUrl() {
-    return hasProperty('PUBLISH_SNAPSHOT_REPOSITORY_URL') ? PUBLISH_SNAPSHOT_REPOSITORY_URL : ""
+    def localSnapshotRepositoryUrl = localProperties.getProperty('PUBLISH_SNAPSHOT_REPOSITORY_URL', "")
+    return hasProperty('PUBLISH_SNAPSHOT_REPOSITORY_URL') ? PUBLISH_SNAPSHOT_REPOSITORY_URL : localSnapshotRepositoryUrl
 }
-def getArtifactId() {
-    return hasProperty('PUBLISH_ARTIFACT_ID') ? PUBLISH_ARTIFACT_ID : ""
-}
-def getGroupId() {
-    return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : "cn.theone"
-}
-def getVersionName() {
-    return hasProperty('PUBLISH_VERSION_NAME') ? PUBLISH_VERSION_NAME : "1.0.0"
-}
-def isRelease() {
-    return hasProperty('PUBLISH_IS_RELEASE') ? PUBLISH_IS_RELEASE : true
+def isPublishRelease() {
+    def localIsRelease = localProperties.getProperty('PUBLISH_IS_RELEASE', true)
+    return hasProperty('PUBLISH_IS_RELEASE') ? PUBLISH_IS_RELEASE : localIsRelease
 }
 
 afterEvaluate { project ->
     uploadArchives {
         repositories {
             mavenDeployer {
-                pom.artifactId = getArtifactId()
-                pom.groupId = getGroupId()
-                if (isRelease()) {
-                    pom.version = getVersionName()
+                pom.artifactId = getPublishArtifactId()
+                pom.groupId = getPublishGroupId()
+                if (isPublishRelease()) {
+                    pom.version = getPublishVersionName()
                 } else {
-                    pom.version = getVersionName() + "-SNAPSHOT"
+                    pom.version = getPublishVersionName() + "-SNAPSHOT"
                 }
                 repository(url: getReleaseRepositoryUrl()) {
                     authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
