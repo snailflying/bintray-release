@@ -51,4 +51,3 @@ publish {
     description = 'Super duper easy way to gradle your Android and other artifacts to bintray'
     website = "https://github.com/snailflying/${rootProject.name}"
 }
-//./gradlew bintrayUpload -PbintrayUser=bravoon -PbintrayKey=5f3ae2ec0cf6d6567d1214936ff15e328de263fe -PdryRun=false
