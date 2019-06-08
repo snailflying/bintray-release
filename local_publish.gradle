@@ -1,0 +1,33 @@
+if (!hasProperty("publishLocal")) {
+    return
+}
+
+
+//publishLocal 是否发版到本地
+//VERSION_NAME 版本号
+//PUBLISH_GROUP_ID = "cn.theone" 组
+//PUBLISH_ARTIFACT_ID  模块名
+
+apply plugin: 'maven'
+
+def getArtifactId() {
+    return hasProperty('PUBLISH_ARTIFACT_ID') ? PUBLISH_ARTIFACT_ID : ""
+}
+def getGroupId() {
+    return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : "cn.theone"
+}
+def getVersionName() {
+    return hasProperty('PUBLISH_VERSION_NAME') ? PUBLISH_VERSION_NAME : "1.0.0"
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri("${System.properties['user.home']}/.gradle/local_repo"))
+
+            pom.version=getVersionName()
+            pom.artifactId=getArtifactId()
+            pom.groupId=getGroupId()
+        }
+    }
+}

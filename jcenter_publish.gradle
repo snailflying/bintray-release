@@ -1,0 +1,50 @@
+if (!hasProperty("publishJcenter")) {
+    return
+}
+
+//publishJcenter 是否发版到Jcenter
+//BINTRAY_USER jcenter用户名
+//BINTRAY_KEY  jcenter验证Key
+//PUBLISH_GROUP_ID 组
+//PUBLISH_ARTIFACT_ID 模块名
+//PUBLISH_VERSION_NAME 版本号
+//PUBLISH_DESCRIPTION 描述
+//PUBLISH_JCENTER_GITHUB_REPOSITORIES_NAME 在github上到项目名
+
+apply plugin: 'com.novoda.bintray-release'
+
+def getBintrayUser() {
+    return hasProperty('BINTRAY_USER') ? BINTRAY_USER : ""
+}
+
+def getBintrayKey() {
+    return hasProperty('BINTRAY_KEY') ? BINTRAY_KEY : ""
+}
+
+def getArtifactId() {
+    return hasProperty('PUBLISH_ARTIFACT_ID') ? PUBLISH_ARTIFACT_ID : ""
+}
+
+def getGroupId() {
+    return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : "cn.theone"
+}
+
+def getVersionName() {
+    return hasProperty('PUBLISH_VERSION_NAME') ? PUBLISH_VERSION_NAME : "1.0.0"
+}
+
+def getWebsiteUrl() {
+    return "https://github.com/snailflying/${PUBLISH_JCENTER_GITHUB_REPOSITORIES_NAME}"
+}
+
+publish {
+    bintrayUser = getBintrayUser()
+    bintrayKey = getBintrayKey()
+    dryRun = false
+    userOrg = 'bravoon'
+    groupId = getGroupId()
+    artifactId = getArtifactId()
+    publishVersion = getVersionName()
+    desc = getDescription()
+    website = getWebsiteUrl()
+}

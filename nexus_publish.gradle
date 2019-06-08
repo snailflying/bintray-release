@@ -1,0 +1,60 @@
+if (!hasProperty("publishNexus")) {
+    return
+}
+apply plugin:'maven'
+
+//publishNexus 是否发版到Nexus仓库
+//NEXUS_USERNAME 用户名
+//NEXUS_PASSWORD 密码
+//PUBLISH_RELEASE_REPOSITORY_URL release仓库url
+//PUBLISH_SNAPSHOT_REPOSITORY_URL snapshot仓库url
+//PUBLISH_ARTIFACT_ID = "bintray" 模块名称
+//PUBLISH_GROUP_ID = "cn.theone" 组
+//PUBLISH_VERSION_NAME = "1.1.5" 版本号
+//PUBLISH_IS_RELEASE = true 是否上传release仓库
+def getRepositoryUsername() {
+    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+}
+def getRepositoryPassword() {
+    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
+}
+def getReleaseRepositoryUrl() {
+    return hasProperty('PUBLISH_RELEASE_REPOSITORY_URL') ? PUBLISH_RELEASE_REPOSITORY_URL : ""
+}
+def getSnapshotRepositoryUrl() {
+    return hasProperty('PUBLISH_SNAPSHOT_REPOSITORY_URL') ? PUBLISH_SNAPSHOT_REPOSITORY_URL : ""
+}
+def getArtifactId() {
+    return hasProperty('PUBLISH_ARTIFACT_ID') ? PUBLISH_ARTIFACT_ID : ""
+}
+def getGroupId() {
+    return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : "cn.theone"
+}
+def getVersionName() {
+    return hasProperty('PUBLISH_VERSION_NAME') ? PUBLISH_VERSION_NAME : "1.0.0"
+}
+def isRelease() {
+    return hasProperty('PUBLISH_IS_RELEASE') ? PUBLISH_IS_RELEASE : true
+}
+
+afterEvaluate { project ->
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                pom.artifactId = getArtifactId()
+                pom.groupId = getGroupId()
+                if (isRelease()) {
+                    pom.version = getVersionName()
+                } else {
+                    pom.version = getVersionName() + "-SNAPSHOT"
+                }
+                repository(url: getReleaseRepositoryUrl()) {
+                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                }
+                snapshotRepository(url: getSnapshotRepositoryUrl()) {
+                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                }
+            }
+        }
+    }
+}
