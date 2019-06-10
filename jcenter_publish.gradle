@@ -31,7 +31,7 @@ def getPublishBintrayKey() {
 }
 
 def getPublishGroupId() {
-    def localGroupId = localProperties.getProperty('PUBLISH_GROUP_ID', "cn.theone")
+    def localGroupId = localProperties.getProperty('PUBLISH_GROUP_ID', "com.theone")
     return hasProperty('PUBLISH_GROUP_ID') ? PUBLISH_GROUP_ID : localGroupId
 }
 def getPublishArtifactId() {
